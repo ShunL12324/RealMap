@@ -2,10 +2,6 @@
 buildscript {
     repositories {
         maven {
-            name = 'codemc-releases'
-            url = 'https://repo.codemc.org/repository/maven'
-        }
-        maven {
             name = 'forge'
             url = 'https://files.minecraftforge.net/maven'
         }
@@ -18,7 +14,6 @@ buildscript {
 
 plugins {
     id 'org.spongepowered.plugin' version '0.9.0'
-    id "com.github.johnrengelman.shadow" version "4.0.4"
     id 'idea'
 }
 
@@ -28,17 +23,10 @@ version = pluginVersion
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-repositories {
-    maven {
-        name = 'codemc-public'
-        url = 'https://repo.codemc.io/repository/maven-public/'
-    }
-}
 
 dependencies {
     annotationProcessor 'org.spongepowered:spongeapi:7.1.0'
     compile 'org.spongepowered:spongeapi:7.1.0'
-    compile group: 'org.bstats', name: 'bstats-sponge', version: '1.7'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -57,15 +45,6 @@ jar {
     manifest.attributes('FMLAT': 'myplugin_at.cfg')
 }
 
-shadowJar{
-    dependencies {
-        exclude(dependency('org.spongepowered:spongeapi:7.1.0'))
-    }
-}
-
-configurations {
-    runtime.exclude module:'spongeapi'
-}
 
 
 sponge.plugin.id = pluginId

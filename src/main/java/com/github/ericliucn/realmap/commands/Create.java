@@ -19,6 +19,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Create implements CommandExecutor {
 
@@ -65,6 +67,8 @@ public class Create implements CommandExecutor {
     public static CommandSpec build(){
         return CommandSpec.builder()
                 .executor(new Create())
+                .description(Text.of("Create an image map"))
+                .permission("realmap.create")
                 .arguments(
                         GenericArguments.remainingJoinedStrings(Text.of("URL_OR_FILENAME"))
                 )
@@ -73,12 +77,16 @@ public class Create implements CommandExecutor {
 
     private static void giveTheMap(EntityPlayerMP playerMP, String URLorFileName) throws IOException {
         ImageMapData imageMapData = new ImageMapData(playerMP,URLorFileName);
-        Sponge.getScheduler().createTaskBuilder()
-                .execute(()->{
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (imageMapData.itemStack!=null){
                     playerMP.inventory.addItemStackToInventory(imageMapData.itemStack);
-                })
-                .async()
-                .submit(Main.getINSTANCE());
+                    this.cancel();
+                }
+            }
+        },0,1000);
     }
 
 

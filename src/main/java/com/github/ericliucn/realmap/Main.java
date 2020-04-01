@@ -4,16 +4,15 @@ import com.github.ericliucn.realmap.commands.Base;
 import com.github.ericliucn.realmap.config.ColorData;
 import com.github.ericliucn.realmap.config.Message;
 import com.google.inject.Inject;
-import org.bstats.sponge.Metrics2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.util.metric.MetricsConfigManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +62,12 @@ public class Main {
         }
 
         //register commands
-        Sponge.getCommandManager().register(this, Base.build(),"realmap");
+        Sponge.getCommandManager().register(this, Base.build(),"realmap","rmap");
+    }
+
+    @Listener
+    public void reloadEvent(GameReloadEvent event) throws IOException {
+        Message.reloadProperties();
     }
 
     private static void createImagesDir(File file) throws IOException {
