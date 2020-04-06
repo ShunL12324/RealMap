@@ -16,11 +16,11 @@ public class ImageMapData {
         int id = playerMP.getServerWorld().getUniqueDataId("map");
         mapData = new MapData("map_"+id);
         mapData.scale = (byte)0;
-        mapData.zCenter = -128;
+        mapData.zCenter = 999999;
         mapData.unlimitedTracking = false;
         mapData.trackingPosition = false;
-        mapData.xCenter = 128;
-        mapData.dimension = 0;
+        mapData.xCenter = 0;
+        mapData.dimension = 999999;
         mapData.colors = ImageProcess.getMapDataOfURLorFileName(URLorFileName);
         mapData.markDirty();
         playerMP.getServerWorld().setData("map_"+id,mapData);

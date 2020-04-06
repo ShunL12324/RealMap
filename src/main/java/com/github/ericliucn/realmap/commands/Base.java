@@ -31,7 +31,7 @@ public class Base implements CommandExecutor {
                 .onClick(TextActions.openUrl(wikiURL))
                 .color(TextColors.AQUA)
                 .build();
-        list.add(formatString("&5Version: &b0.1(BETA)"));
+        list.add(formatString("&5Version: &b0.2(BETA)"));
         list.add(Text.builder("Wiki: ").color(TextColors.DARK_PURPLE).append(wiki).build());
 
         PaginationList.builder()

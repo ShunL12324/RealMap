@@ -25,7 +25,7 @@ import java.nio.file.Paths;
         authors = {
                 "EricLiu"
         },
-        version = "0.1"
+        version = "0.2"
 )
 public class Main {
 
