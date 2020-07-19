@@ -25,8 +25,7 @@ targetCompatibility = '1.8'
 
 
 dependencies {
-    annotationProcessor 'org.spongepowered:spongeapi:7.2.0'
-    compile 'org.spongepowered:spongeapi:7.2.0'
+    compile 'org.spongepowered:spongeforge:1.12.2-2838-7.2.2:dev'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
