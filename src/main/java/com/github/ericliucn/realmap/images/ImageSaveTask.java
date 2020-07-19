@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ImageSaveTask {
 
@@ -34,6 +35,7 @@ public class ImageSaveTask {
         mapData.colors = getColorData();
         mapData.markDirty();
         world.setData("map_"+id,mapData);
+        Objects.requireNonNull(world.getMapStorage()).saveAllData();
     }
 
     public ItemStack getItemStack(){

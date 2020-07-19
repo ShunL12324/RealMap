@@ -33,6 +33,11 @@ public class CommandManager {
             .executor((src, args) -> {
                 String name = args.<String>getOne("name").get();
                 String file = args.<String>getOne("file").get();
+
+                if (Main.INSTANCE.getDataManager().saveExists(name)){
+                    src.sendMessage(Main.INSTANCE.getDataManager().getMsg("name_exists"));
+                    return CommandResult.success();
+                }
                 try {
                     BufferedImage image = Main.INSTANCE.getDataManager().getBufferedImage(file, src);
                     if (image!=null){
@@ -61,6 +66,10 @@ public class CommandManager {
             .executor((src, args) -> {
                 String name = args.<String>getOne("name").get();
                 URL url = args.<URL>getOne("url").get();
+                if (Main.INSTANCE.getDataManager().saveExists(name)){
+                    src.sendMessage(Main.INSTANCE.getDataManager().getMsg("name_exists"));
+                    return CommandResult.success();
+                }
                 try {
                     BufferedImage image = Main.INSTANCE.getDataManager().getDownloadImage(url.toString(), src);
                     if (image!=null){

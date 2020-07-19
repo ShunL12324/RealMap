@@ -3,11 +3,17 @@ package com.github.ericliucn.realmap.config;
 import com.github.ericliucn.realmap.Main;
 import com.github.ericliucn.realmap.utils.ImageDownloadTask;
 import com.github.ericliucn.realmap.utils.Utils;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.FMLServerHandler;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
@@ -19,11 +25,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 public class DataManager {
 
@@ -54,6 +62,7 @@ public class DataManager {
 
     private void creatFileIfNotExist() throws IOException {
         if (!this.msgFile.exists()){
+
             Main.INSTANCE.getPluginContainer().getAsset("message.properties").ifPresent(asset -> {
                 try {
                     asset.copyToDirectory(this.confDir.toPath());
@@ -174,20 +183,71 @@ public class DataManager {
         return node.isVirtual() ? -1:node.getInt();
     }
 
+    public boolean saveExists(String name){
+        for (Map.Entry<Object, ? extends CommentedConfigurationNode> node:rootNode.getNode("Save").getChildrenMap().entrySet()
+        ) {
+            if (node.getKey().toString().equals(name)) return true;
+        }
+        return false;
+    }
+
     public Set<String> getSavedName(){
         return this.savedImg.keySet();
     }
 
-    public void delSave(String name, int meta) throws IOException {
-        this.savedImg.remove(name);
-        this.rootNode.getNode("Save").removeChild(name);
-        this.saveSAVE();
+    public void delSave(@Nullable String name, int meta) throws IOException {
+        if (name != null){
+            this.savedImg.remove(name);
+            this.rootNode.getNode("Save").removeChild(name);
+            this.saveSAVE();
+        }
 
-        File world = new File(FMLServerHandler.instance().getSavesDirectory(), "world");
-        File data = new File(world, "data");
-        File map = new File(data, "map_" + meta + ".dat");
-        map.deleteOnExit();
-        System.out.println(map.exists());
+        Sponge.getServer().getOnlinePlayers().forEach(player -> {
+            ItemStack itemStack = new ItemStack(Items.FILLED_MAP, 1, meta);
+            EntityPlayerMP playerMP = ((EntityPlayerMP) player);
+            playerMP.inventory.mainInventory.forEach(stack -> {
+                if (stack.isItemEqual(itemStack)){
+                    stack.shrink(stack.getCount());
+                }
+            });
+
+        });
+
+        File root = FMLServerHandler.instance().getSavesDirectory();
+        String path = Paths.get(root.getPath(), "world", "data", "map_" + meta + ".dat").toString();
+        File map = new File(path);
+        if (map.exists()){
+            map.delete();
+        }
+    }
+
+    public void setMapCount() throws IOException {
+        File root = FMLServerHandler.instance().getSavesDirectory();
+        String path = Paths.get(root.getPath(), "world", "data", "idcounts.dat").toString();
+        String dataPath = Paths.get(root.getPath(), "world", "data").toString();
+        File data= new File(dataPath);
+        File count = new File(path);
+
+        Collection<File> collection = new HashSet<>();
+        Utils.addTree(data, collection);
+        Set<Integer> files = collection.stream()
+                .filter(file -> file.getName().startsWith("map_"))
+                .map(File::getName)
+                .map(string -> string.replace("map_", "").replace(".dat", ""))
+                .map(Integer::valueOf)
+                .collect(Collectors.toSet());
+        int max = Collections.max(files);
+
+        try {
+            NBTTagCompound tagCompound = CompressedStreamTools.read(count);
+            assert tagCompound != null;
+            tagCompound.setShort("map", (short) max);
+            CompressedStreamTools.write(tagCompound, count);
+            World world = FMLServerHandler.instance().getServer().getWorld(0);
+            Objects.requireNonNull(world.getMapStorage()).saveAllData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
