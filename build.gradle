@@ -33,7 +33,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 minecraft {
 
     forgeVersion = '1.12.2-14.23.5.2847'
-    mappings = 'snapshot_20180814'
+    mappings = 'stable_39'
 
     runDir = 'run'
     makeObfSourceJar = false
@@ -41,7 +41,7 @@ minecraft {
 
 
 jar {
-    manifest.attributes('FMLAT': 'myplugin_at.cfg')
+    manifest.attributes('FMLAT': 'realmap_at.cfg')
 }
 
 

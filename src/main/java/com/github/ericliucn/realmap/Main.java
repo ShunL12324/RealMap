@@ -45,11 +45,12 @@ public class Main {
 
         //register commands
         this.commandManager = new CommandManager();
+
     }
 
     @Listener
     public void onServerStop(GameStoppingServerEvent event) throws IOException {
-        dataManager.setMapCount();
+        //dataManager.setMapCount();
     }
 
     @Listener

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.fml.server.FMLServerHandler;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -191,6 +192,7 @@ public class DataManager {
         return false;
     }
 
+    //Only for tab completing
     public Set<String> getSavedName(){
         return this.savedImg.keySet();
     }
@@ -202,6 +204,7 @@ public class DataManager {
             this.saveSAVE();
         }
 
+        //remove map itemstack if possible
         Sponge.getServer().getOnlinePlayers().forEach(player -> {
             ItemStack itemStack = new ItemStack(Items.FILLED_MAP, 1, meta);
             EntityPlayerMP playerMP = ((EntityPlayerMP) player);
@@ -213,21 +216,37 @@ public class DataManager {
 
         });
 
+        //delete map_*.dat file
         File root = FMLServerHandler.instance().getSavesDirectory();
         String path = Paths.get(root.getPath(), "world", "data", "map_" + meta + ".dat").toString();
         File map = new File(path);
         if (map.exists()){
             map.delete();
         }
+
+        //delete map data from cache
+        World world = FMLServerHandler.instance().getServer().getWorld(0);
+        MapStorage mapStorage = world.getMapStorage();
+        String id = "map_" + meta;
+        if (mapStorage!=null){
+            if (mapStorage.loadedDataMap.containsKey(id)){
+                mapStorage.loadedDataList.remove(mapStorage.loadedDataMap.get(id));
+                mapStorage.loadedDataMap.remove(id);
+                //refresh the idcount.dat and idcount cache
+                this.setMapCount(mapStorage);
+            }
+        }
+
     }
 
-    public void setMapCount() throws IOException {
+    public void setMapCount(MapStorage storage) {
         File root = FMLServerHandler.instance().getSavesDirectory();
         String path = Paths.get(root.getPath(), "world", "data", "idcounts.dat").toString();
         String dataPath = Paths.get(root.getPath(), "world", "data").toString();
         File data= new File(dataPath);
         File count = new File(path);
 
+        //get the max number of map_().dat
         Collection<File> collection = new HashSet<>();
         Utils.addTree(data, collection);
         Set<Integer> files = collection.stream()
@@ -236,13 +255,19 @@ public class DataManager {
                 .map(string -> string.replace("map_", "").replace(".dat", ""))
                 .map(Integer::valueOf)
                 .collect(Collectors.toSet());
-        int max = Collections.max(files);
+        int max = files.size() == 0 ? 0 : Collections.max(files);
 
         try {
+            //get current count and set it
             NBTTagCompound tagCompound = CompressedStreamTools.read(count);
             assert tagCompound != null;
             tagCompound.setShort("map", (short) max);
+            // flush cache
+            storage.idCounts.put("map", ((short) max));
+            //write to idcount.dat
             CompressedStreamTools.write(tagCompound, count);
+
+            //save all map data(maybe not necessary)
             World world = FMLServerHandler.instance().getServer().getWorld(0);
             Objects.requireNonNull(world.getMapStorage()).saveAllData();
         } catch (IOException e) {
