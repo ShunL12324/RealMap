@@ -1,14 +1,13 @@
 package com.github.ericliucn.realmap.commands;
 
 import com.github.ericliucn.realmap.Main;
-import com.github.ericliucn.realmap.config.DataManager;
 import com.github.ericliucn.realmap.images.ImageSaveTask;
+import com.github.ericliucn.realmap.images.ImageSplit;
 import com.github.ericliucn.realmap.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.MapStorage;
+import net.minecraft.util.math.RayTraceResult;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -19,10 +18,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.common.item.inventory.util.ItemStackUtil;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CommandManager {
 
@@ -41,18 +40,14 @@ public class CommandManager {
                     src.sendMessage(Main.INSTANCE.getDataManager().getMsg("name_exists"));
                     return CommandResult.success();
                 }
-                try {
-                    BufferedImage image = Main.INSTANCE.getDataManager().getBufferedImage(file, src);
-                    if (image!=null){
-                        ImageSaveTask imageSaveTask = new ImageSaveTask(image);
-                        Main.INSTANCE.getDataManager().addToSave(name, imageSaveTask.getId());
-                        if (src instanceof Player){
-                            Player player = ((Player) src);
-                            player.getInventory().offer(ItemStackUtil.fromNative(imageSaveTask.getItemStack()));
-                        }
+                BufferedImage image = Main.INSTANCE.getDataManager().getBufferedImage(file, src);
+                if (image!=null){
+                    ImageSaveTask imageSaveTask = new ImageSaveTask(image);
+                    Main.INSTANCE.getDataManager().addToSave(name, imageSaveTask.getId());
+                    if (src instanceof Player){
+                        Player player = ((Player) src);
+                        player.getInventory().offer(ItemStackUtil.fromNative(imageSaveTask.getItemStack()));
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 return CommandResult.success();
             })
@@ -73,18 +68,14 @@ public class CommandManager {
                     src.sendMessage(Main.INSTANCE.getDataManager().getMsg("name_exists"));
                     return CommandResult.success();
                 }
-                try {
-                    BufferedImage image = Main.INSTANCE.getDataManager().getDownloadImage(url.toString(), src);
-                    if (image!=null){
-                        ImageSaveTask imageSaveTask = new ImageSaveTask(image);
-                        Main.INSTANCE.getDataManager().addToSave(name, imageSaveTask.getId());
-                        if (src instanceof Player){
-                            Player player = ((Player) src);
-                            player.getInventory().offer(ItemStackUtil.fromNative(imageSaveTask.getItemStack()));
-                        }
+                BufferedImage image = Main.INSTANCE.getDataManager().getDownloadImage(url.toString(), src);
+                if (image!=null){
+                    ImageSaveTask imageSaveTask = new ImageSaveTask(image);
+                    Main.INSTANCE.getDataManager().addToSave(name, imageSaveTask.getId());
+                    if (src instanceof Player){
+                        Player player = ((Player) src);
+                        player.getInventory().offer(ItemStackUtil.fromNative(imageSaveTask.getItemStack()));
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 return CommandResult.success();
             })
@@ -137,13 +128,9 @@ public class CommandManager {
                 if (!Main.INSTANCE.getDataManager().getSavedName().contains(name)){
                     src.sendMessage(Main.INSTANCE.getDataManager().getMsg("no_such_save"));
                 }else {
-                    try {
-                        int meta = Main.INSTANCE.getDataManager().getSave(name);
-                        Main.INSTANCE.getDataManager().delSave(name, meta);
-                        src.sendMessage(Main.INSTANCE.getDataManager().getMsg("del_success"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    int meta = Main.INSTANCE.getDataManager().getSave(name);
+                    Main.INSTANCE.getDataManager().delSave(name, meta);
+                    src.sendMessage(Main.INSTANCE.getDataManager().getMsg("del_success"));
                 }
                 return CommandResult.success();
             })
@@ -170,7 +157,43 @@ public class CommandManager {
             .child(GIVE, "give")
             .build();
 
+    //not implement yet
+    private static final CommandSpec FULL = CommandSpec.builder()
+            .executor((src, args) -> {
+                if (src instanceof EntityPlayerMP){
+
+                    String name = args.<String>getOne("name").get();
+                    String file = args.<String>getOne("file").get();
+                    int xSize = args.<Integer>getOne("xsize").get();
+                    int ySize = args.<Integer>getOne("ysize").get();
+
+                    BufferedImage origin = Main.INSTANCE.getDataManager().getBufferedImage(file, src);
+                    ImageSplit split = new ImageSplit(origin, xSize, ySize);
+                    Map<Integer[], BufferedImage> imageMap = split.getImageMap();
+
+                    EntityPlayerMP playerMP = ((EntityPlayerMP) src);
+                    RayTraceResult result = Utils.raytraceFromEntity(playerMP.world, playerMP, false, 10);
+
+
+
+
+                }else {
+                    src.sendMessage(Main.INSTANCE.getDataManager().getMsg("player_only"));
+                }
+
+                return CommandResult.success();
+            })
+            .arguments(GenericArguments.seq(
+                    GenericArguments.string(Text.of("name")),
+                    GenericArguments.string(Text.of("file")),
+                    GenericArguments.integer(Text.of("xsize")),
+                    GenericArguments.integer(Text.of("ysize"))
+            ))
+            .permission("realmap.full")
+            .build();
+
     public CommandManager(){
         Sponge.getCommandManager().register(Main.INSTANCE, BASE,"realmap", "rmap");
     }
+
 }

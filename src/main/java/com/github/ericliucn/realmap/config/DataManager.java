@@ -97,9 +97,13 @@ public class DataManager {
         }
     }
 
-    private void loadProperties() throws IOException {
+    private void loadProperties() {
         if (this.msgFile.exists()){
-            this.properties.load(new FileInputStream(this.msgFile));
+            try {
+                this.properties.load(new FileInputStream(this.msgFile));
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }else {
             Main.INSTANCE.getLogger().error("Missing message.properties file");
         }
@@ -111,26 +115,34 @@ public class DataManager {
     }
 
     @Nullable
-    public BufferedImage getBufferedImage(String fileName, CommandSource source) throws IOException {
+    public BufferedImage getBufferedImage(String fileName, CommandSource source) {
 
-        if (fileExist(fileName)){
-            return ImageIO.read(getImageFile(fileName));
-        }else {
-            source.sendMessage(this.getMsg("no_such_file"));
+        try {
+            if (fileExist(fileName)){
+                return ImageIO.read(getImageFile(fileName));
+            }else {
+                source.sendMessage(this.getMsg("no_such_file"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
     @Nullable
-    public BufferedImage getDownloadImage(String url, CommandSource source) throws MalformedURLException {
-        ImageDownloadTask task = new ImageDownloadTask(url);
-        Future<BufferedImage> future = task.getImage();
+    public BufferedImage getDownloadImage(String url, CommandSource source){
         try {
-            return future.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            ImageDownloadTask task = new ImageDownloadTask(url);
+            Future<BufferedImage> future = task.getImage();
+            try {
+                return future.get(5, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                e.printStackTrace();
+                source.sendMessage(getMsg("download_failed"));
+            }
+        }catch (MalformedURLException e){
             e.printStackTrace();
-            source.sendMessage(getMsg("download_failed"));
         }
         return null;
     }
@@ -139,14 +151,24 @@ public class DataManager {
         return new File(this.imgDir, name);
     }
 
-    private boolean fileExist(String fileName) throws IOException {
-        return this.getImageFile(fileName).exists() && ImageIO.read(this.getImageFile(fileName)) != null;
+    private boolean fileExist(String fileName){
+        try {
+            return this.getImageFile(fileName).exists() && ImageIO.read(this.getImageFile(fileName)) != null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //read index-RGB data from "ColorTable.TXT", create a hash map
-    private void setColorMap() throws IOException {
+    private void setColorMap(){
         Asset asset = Main.INSTANCE.getPluginContainer().getAsset("ColorTable.TXT").get();
-        List<String> colors = asset.readLines();
+        List<String> colors = null;
+        try {
+            colors = asset.readLines();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         for (String string:colors
         ) {
             String[] ints = string.split(",");
@@ -160,8 +182,12 @@ public class DataManager {
         colorMap.put(index, rgb);
     }
 
-    private void loadSAVE() throws IOException {
-        this.rootNode = this.loader.load();
+    private void loadSAVE(){
+        try {
+            this.rootNode = this.loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.savedImg.clear();
         for (Map.Entry<Object, ? extends CommentedConfigurationNode> node:rootNode.getNode("Save").getChildrenMap().entrySet()
              ) {
@@ -169,11 +195,15 @@ public class DataManager {
         }
     }
 
-    private void saveSAVE() throws IOException {
-        this.loader.save(this.rootNode);
+    private void saveSAVE(){
+        try {
+            this.loader.save(this.rootNode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void addToSave(String name, int meta) throws IOException {
+    public void addToSave(String name, int meta) {
         this.rootNode.getNode("Save", name).setValue(meta);
         this.savedImg.put(name, meta);
         this.saveSAVE();
@@ -197,7 +227,7 @@ public class DataManager {
         return this.savedImg.keySet();
     }
 
-    public void delSave(@Nullable String name, int meta) throws IOException {
+    public void delSave(@Nullable String name, int meta) {
         if (name != null){
             this.savedImg.remove(name);
             this.rootNode.getNode("Save").removeChild(name);
