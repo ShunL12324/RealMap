@@ -1,0 +1,382 @@
+---- Minecraft Crash Report ----
+// Don't be sad, have a hug! <3
+
+Time: 21-7-4 下午7:06
+Description: Watching Server
+
+java.lang.Error: Watchdog
+	at sun.awt.image.OffScreenImageSource.sendPixels(OffScreenImageSource.java:135)
+	at sun.awt.image.OffScreenImageSource.produce(OffScreenImageSource.java:187)
+	at sun.awt.image.OffScreenImageSource.addConsumer(OffScreenImageSource.java:66)
+	at sun.awt.image.OffScreenImageSource.startProduction(OffScreenImageSource.java:80)
+	at java.awt.image.FilteredImageSource.startProduction(FilteredImageSource.java:183)
+	at sun.awt.image.ImageRepresentation.startProduction(ImageRepresentation.java:732)
+	at sun.awt.image.ImageRepresentation.drawToBufImage(ImageRepresentation.java:807)
+	at sun.java2d.pipe.DrawImage.copyImage(DrawImage.java:1021)
+	at sun.java2d.pipe.ValidatePipe.copyImage(ValidatePipe.java:186)
+	at sun.java2d.SunGraphics2D.drawImage(SunGraphics2D.java:3325)
+	at sun.java2d.SunGraphics2D.drawImage(SunGraphics2D.java:3303)
+	at com.github.ericliucn.realmap.utils.Utils.getResizedImage(Utils.java:87)
+	at com.github.ericliucn.realmap.utils.Utils.getMapCanvas(Utils.java:95)
+	at com.github.ericliucn.realmap.utils.ImageUtils.getFrames(ImageUtils.java:48)
+	at com.github.ericliucn.realmap.command.Commands.lambda$static$0(Commands.java:53)
+	at com.github.ericliucn.realmap.command.Commands$$Lambda$5166/1494055486.execute(Unknown Source)
+	at org.spongepowered.common.command.brigadier.tree.SpongeCommandExecutorWrapper.run(SpongeCommandExecutorWrapper.java:52)
+	at org.spongepowered.common.command.brigadier.dispatcher.SpongeCommandDispatcher.execute(SpongeCommandDispatcher.java:209)
+	at org.spongepowered.common.command.registrar.SpongeParameterizedCommandRegistrar.process(SpongeParameterizedCommandRegistrar.java:120)
+	at org.spongepowered.common.command.manager.SpongeCommandManager.process(SpongeCommandManager.java:357)
+	at org.spongepowered.common.command.brigadier.dispatcher.SpongeCommandDispatcher.execute(SpongeCommandDispatcher.java:126)
+	at org.spongepowered.common.command.brigadier.dispatcher.DelegatingCommandDispatcher.execute(DelegatingCommandDispatcher.java:70)
+	at org.spongepowered.common.command.brigadier.dispatcher.DelegatingCommandDispatcher.execute(DelegatingCommandDispatcher.java:45)
+	at net.minecraft.commands.Commands.performCommand(SourceFile:249)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleCommand(SourceFile:1211)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleChat(SourceFile:1198)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleChat(SourceFile:1177)
+	at net.minecraft.network.protocol.game.ServerboundChatPacket.handle(SourceFile:36)
+	at net.minecraft.network.protocol.game.ServerboundChatPacket.handle(SourceFile:9)
+	at org.spongepowered.common.event.tracking.phase.packet.PacketPhaseUtil.onProcessPacket(PacketPhaseUtil.java:249)
+	at net.minecraft.network.protocol.PacketUtils.md9f8635$lambda$tracker$redirectProcessPacket$0$0(SourceFile:552)
+	at net.minecraft.network.protocol.PacketUtils$$Lambda$6548/13486043.run(Unknown Source)
+	at net.minecraft.server.TickTask.run(SourceFile:18)
+	at net.minecraft.util.thread.BlockableEventLoop.doRunTask(SourceFile:144)
+	at net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(SourceFile:23)
+	at net.minecraft.server.MinecraftServer.redirect$zzb000$tracker$wrapAndPerformContextSwitch(SourceFile:4316)
+	at net.minecraft.server.MinecraftServer.doRunTask(SourceFile:761)
+	at net.minecraft.server.MinecraftServer.doRunTask(SourceFile:155)
+	at net.minecraft.util.thread.BlockableEventLoop.pollTask(SourceFile:118)
+	at net.minecraft.server.MinecraftServer.pollTaskInternal(SourceFile:743)
+	at net.minecraft.server.MinecraftServer.pollTask(SourceFile:737)
+	at net.minecraft.util.thread.BlockableEventLoop.managedBlock(SourceFile:127)
+	at net.minecraft.server.MinecraftServer.waitUntilNextTick(SourceFile:722)
+	at net.minecraft.server.MinecraftServer.runServer(SourceFile:674)
+	at net.minecraft.server.MinecraftServer.lambda$spin$0(SourceFile:257)
+	at net.minecraft.server.MinecraftServer$$Lambda$5942/1762628822.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Server Watchdog
+Stacktrace:
+	at sun.awt.image.OffScreenImageSource.sendPixels(OffScreenImageSource.java:135)
+	at sun.awt.image.OffScreenImageSource.produce(OffScreenImageSource.java:187)
+	at sun.awt.image.OffScreenImageSource.addConsumer(OffScreenImageSource.java:66)
+	at sun.awt.image.OffScreenImageSource.startProduction(OffScreenImageSource.java:80)
+	at java.awt.image.FilteredImageSource.startProduction(FilteredImageSource.java:183)
+	at sun.awt.image.ImageRepresentation.startProduction(ImageRepresentation.java:732)
+	at sun.awt.image.ImageRepresentation.drawToBufImage(ImageRepresentation.java:807)
+	at sun.java2d.pipe.DrawImage.copyImage(DrawImage.java:1021)
+	at sun.java2d.pipe.ValidatePipe.copyImage(ValidatePipe.java:186)
+	at sun.java2d.SunGraphics2D.drawImage(SunGraphics2D.java:3325)
+	at sun.java2d.SunGraphics2D.drawImage(SunGraphics2D.java:3303)
+	at com.github.ericliucn.realmap.utils.Utils.getResizedImage(Utils.java:87)
+	at com.github.ericliucn.realmap.utils.Utils.getMapCanvas(Utils.java:95)
+	at com.github.ericliucn.realmap.utils.ImageUtils.getFrames(ImageUtils.java:48)
+	at com.github.ericliucn.realmap.command.Commands.lambda$static$0(Commands.java:53)
+	at com.github.ericliucn.realmap.command.Commands$$Lambda$5166/1494055486.execute(Unknown Source)
+	at org.spongepowered.common.command.brigadier.tree.SpongeCommandExecutorWrapper.run(SpongeCommandExecutorWrapper.java:52)
+	at org.spongepowered.common.command.brigadier.dispatcher.SpongeCommandDispatcher.execute(SpongeCommandDispatcher.java:209)
+	at org.spongepowered.common.command.registrar.SpongeParameterizedCommandRegistrar.process(SpongeParameterizedCommandRegistrar.java:120)
+	at org.spongepowered.common.command.manager.SpongeCommandManager.process(SpongeCommandManager.java:357)
+	at org.spongepowered.common.command.brigadier.dispatcher.SpongeCommandDispatcher.execute(SpongeCommandDispatcher.java:126)
+	at org.spongepowered.common.command.brigadier.dispatcher.DelegatingCommandDispatcher.execute(DelegatingCommandDispatcher.java:70)
+	at org.spongepowered.common.command.brigadier.dispatcher.DelegatingCommandDispatcher.execute(DelegatingCommandDispatcher.java:45)
+	at net.minecraft.commands.Commands.performCommand(SourceFile:249)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleCommand(SourceFile:1211)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleChat(SourceFile:1198)
+	at net.minecraft.server.network.ServerGamePacketListenerImpl.handleChat(SourceFile:1177)
+	at net.minecraft.network.protocol.game.ServerboundChatPacket.handle(SourceFile:36)
+	at net.minecraft.network.protocol.game.ServerboundChatPacket.handle(SourceFile:9)
+	at org.spongepowered.common.event.tracking.phase.packet.PacketPhaseUtil.onProcessPacket(PacketPhaseUtil.java:249)
+	at net.minecraft.network.protocol.PacketUtils.md9f8635$lambda$tracker$redirectProcessPacket$0$0(SourceFile:552)
+	at net.minecraft.network.protocol.PacketUtils$$Lambda$6548/13486043.run(Unknown Source)
+	at net.minecraft.server.TickTask.run(SourceFile:18)
+	at net.minecraft.util.thread.BlockableEventLoop.doRunTask(SourceFile:144)
+	at net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(SourceFile:23)
+	at net.minecraft.server.MinecraftServer.redirect$zzb000$tracker$wrapAndPerformContextSwitch(SourceFile:4316)
+	at net.minecraft.server.MinecraftServer.doRunTask(SourceFile:761)
+	at net.minecraft.server.MinecraftServer.doRunTask(SourceFile:155)
+	at net.minecraft.util.thread.BlockableEventLoop.pollTask(SourceFile:118)
+	at net.minecraft.server.MinecraftServer.pollTaskInternal(SourceFile:743)
+	at net.minecraft.server.MinecraftServer.pollTask(SourceFile:737)
+	at net.minecraft.util.thread.BlockableEventLoop.managedBlock(SourceFile:127)
+
+-- Sponge PhaseTracker --
+Details:
+	Phase Stack: [Empty stack]
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.handler$zzb000$tracker$addPhaseTrackerToCrashReport(SourceFile:4246)
+	at net.minecraft.server.MinecraftServer.fillReport(SourceFile:977)
+	at net.minecraft.server.dedicated.DedicatedServer.fillReport(SourceFile:273)
+	at net.minecraft.server.dedicated.ServerWatchdog.run(SourceFile:64)
+	at java.lang.Thread.run(Thread.java:748)
+
+-- Thread Dump --
+Details:
+	Threads: "AWT-Shutdown" Id=88 TIMED_WAITING on java.lang.Object@4fc9ca10
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.Object@4fc9ca10
+	at sun.awt.AWTAutoShutdown.run(AWTAutoShutdown.java:314)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Java2D Disposer" Id=71 WAITING on java.lang.ref.ReferenceQueue$Lock@410e2d99
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.ReferenceQueue$Lock@410e2d99
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:144)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:165)
+	at sun.java2d.Disposer.run(Disposer.java:148)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Java2D Queue Flusher" Id=70 TIMED_WAITING on sun.java2d.opengl.OGLRenderQueue$QueueFlusher@4531a160
+	at java.lang.Object.wait(Native Method)
+	-  waiting on sun.java2d.opengl.OGLRenderQueue$QueueFlusher@4531a160
+	at sun.java2d.opengl.OGLRenderQueue$QueueFlusher.run(OGLRenderQueue.java:203)
+
+
+"AppKit Thread" Id=68 RUNNABLE (in native)
+
+
+"Netty Server IO #2" Id=62 RUNNABLE (in native)
+	at sun.nio.ch.KQueueArrayWrapper.kevent0(Native Method)
+	at sun.nio.ch.KQueueArrayWrapper.poll(KQueueArrayWrapper.java:198)
+	at sun.nio.ch.KQueueSelectorImpl.doSelect(KQueueSelectorImpl.java:117)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	-  locked io.netty.channel.nio.SelectedSelectionKeySet@3327a2
+	-  locked java.util.Collections$UnmodifiableSet@12bf4fe
+	-  locked sun.nio.ch.KQueueSelectorImpl@317963a7
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:756)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:411)
+	...
+
+
+"Netty Server IO #1" Id=61 RUNNABLE (in native)
+	at sun.nio.ch.KQueueArrayWrapper.kevent0(Native Method)
+	at sun.nio.ch.KQueueArrayWrapper.poll(KQueueArrayWrapper.java:198)
+	at sun.nio.ch.KQueueSelectorImpl.doSelect(KQueueSelectorImpl.java:117)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	-  locked io.netty.channel.nio.SelectedSelectionKeySet@798bee49
+	-  locked java.util.Collections$UnmodifiableSet@601cd8ed
+	-  locked sun.nio.ch.KQueueSelectorImpl@3e4e4c14
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:756)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:411)
+	...
+
+
+"Server Watchdog" Id=60 RUNNABLE
+	at sun.management.ThreadImpl.dumpThreads0(Native Method)
+	at sun.management.ThreadImpl.dumpAllThreads(ThreadImpl.java:454)
+	at net.minecraft.server.dedicated.ServerWatchdog.run(SourceFile:49)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Thread-7" Id=59 RUNNABLE
+	at sun.nio.fs.UnixNativeDispatcher.readdir(Native Method)
+	at sun.nio.fs.UnixDirectoryStream$UnixDirectoryIterator.readNextEntry(UnixDirectoryStream.java:168)
+	at sun.nio.fs.UnixDirectoryStream$UnixDirectoryIterator.hasNext(UnixDirectoryStream.java:201)
+	-  locked sun.nio.fs.UnixDirectoryStream$UnixDirectoryIterator@44507421
+	at sun.nio.fs.PollingWatchService$PollingWatchKey.poll(PollingWatchService.java:336)
+	-  locked sun.nio.fs.PollingWatchService$PollingWatchKey@628f2344
+	at sun.nio.fs.PollingWatchService$PollingWatchKey$1.run(PollingWatchService.java:288)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:308)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(ScheduledThreadPoolExecutor.java:180)
+	...
+
+	Number of locked synchronizers = 1
+	- java.util.concurrent.ThreadPoolExecutor$Worker@46f86aed
+
+
+"Netty Server IO #0" Id=55 RUNNABLE (in native)
+	at sun.nio.ch.KQueueArrayWrapper.kevent0(Native Method)
+	at sun.nio.ch.KQueueArrayWrapper.poll(KQueueArrayWrapper.java:198)
+	at sun.nio.ch.KQueueSelectorImpl.doSelect(KQueueSelectorImpl.java:117)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	-  locked io.netty.channel.nio.SelectedSelectionKeySet@64524448
+	-  locked java.util.Collections$UnmodifiableSet@28308a3a
+	-  locked sun.nio.ch.KQueueSelectorImpl@6f060261
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:756)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:411)
+	...
+
+
+"ObjectCleanerThread" Id=54 TIMED_WAITING on java.lang.ref.ReferenceQueue$Lock@748889c6
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.ReferenceQueue$Lock@748889c6
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:144)
+	at io.netty.util.internal.ObjectCleaner$1.run(ObjectCleaner.java:54)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Server console handler" Id=53 RUNNABLE (in native)
+	at java.io.FileInputStream.readBytes(Native Method)
+	at java.io.FileInputStream.read(FileInputStream.java:255)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:284)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	-  locked java.io.BufferedInputStream@20ee31b
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	-  locked java.io.InputStreamReader@2ec3d83a
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	...
+
+
+"DestroyJavaVM" Id=52 RUNNABLE
+
+
+"Server thread" Id=49 RUNNABLE
+	at sun.awt.image.OffScreenImageSource.sendPixels(OffScreenImageSource.java:135)
+	at sun.awt.image.OffScreenImageSource.produce(OffScreenImageSource.java:187)
+	at sun.awt.image.OffScreenImageSource.addConsumer(OffScreenImageSource.java:66)
+	-  locked sun.awt.image.OffScreenImageSource@7109d289
+	at sun.awt.image.OffScreenImageSource.startProduction(OffScreenImageSource.java:80)
+	at java.awt.image.FilteredImageSource.startProduction(FilteredImageSource.java:183)
+	-  locked java.awt.image.FilteredImageSource@417fa3d7
+	at sun.awt.image.ImageRepresentation.startProduction(ImageRepresentation.java:732)
+	at sun.awt.image.ImageRepresentation.drawToBufImage(ImageRepresentation.java:807)
+	at sun.java2d.pipe.DrawImage.copyImage(DrawImage.java:1021)
+	...
+
+
+"Snooper Timer" Id=50 WAITING on java.util.TaskQueue@341c96d8
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.util.TaskQueue@341c96d8
+	at java.lang.Object.wait(Object.java:502)
+	at java.util.TimerThread.mainLoop(Timer.java:526)
+	at java.util.TimerThread.run(Timer.java:505)
+
+
+"Timer hack thread" Id=44 TIMED_WAITING
+	at java.lang.Thread.sleep(Native Method)
+	at net.minecraft.Util$7.run(SourceFile:636)
+
+
+"Sponge Async Scheduler Thread" Id=37 TIMED_WAITING on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@4ae8a69
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@4ae8a69
+	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2163)
+	at org.spongepowered.common.scheduler.AsyncScheduler.preTick(AsyncScheduler.java:138)
+	at org.spongepowered.common.scheduler.SpongeScheduler.runTick(SpongeScheduler.java:172)
+	at org.spongepowered.common.scheduler.AsyncScheduler.mainLoop(AsyncScheduler.java:74)
+	at org.spongepowered.common.scheduler.AsyncScheduler$$Lambda$393/1186076210.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Sponge-WatchService-0" Id=36 WAITING on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@3b0c8def
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@3b0c8def
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+	at java.util.concurrent.LinkedBlockingDeque.takeFirst(LinkedBlockingDeque.java:492)
+	at java.util.concurrent.LinkedBlockingDeque.take(LinkedBlockingDeque.java:680)
+	at sun.nio.fs.AbstractWatchService.take(AbstractWatchService.java:118)
+	at org.spongepowered.configurate.reference.WatchServiceListener.lambda$new$0(WatchServiceListener.java:106)
+	at org.spongepowered.configurate.reference.WatchServiceListener$$Lambda$369/1995042520.run(Unknown Source)
+	...
+
+
+"Log4j2-TF-6-AsyncLogger[AsyncContext@45667d98]-5" Id=34 TIMED_WAITING on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@751f042
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@751f042
+	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+	at com.lmax.disruptor.TimeoutBlockingWaitStrategy.waitFor(TimeoutBlockingWaitStrategy.java:38)
+	at com.lmax.disruptor.ProcessingSequenceBarrier.waitFor(ProcessingSequenceBarrier.java:56)
+	at com.lmax.disruptor.BatchEventProcessor.processEvents(BatchEventProcessor.java:159)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:125)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Log4j2-TF-5-AsyncLogger[AsyncContext@18b4aac2]-4" Id=32 TIMED_WAITING on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@57ab0c26
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@57ab0c26
+	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+	at com.lmax.disruptor.TimeoutBlockingWaitStrategy.waitFor(TimeoutBlockingWaitStrategy.java:38)
+	at com.lmax.disruptor.ProcessingSequenceBarrier.waitFor(ProcessingSequenceBarrier.java:56)
+	at com.lmax.disruptor.BatchEventProcessor.processEvents(BatchEventProcessor.java:159)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:125)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"Log4j2-TF-1-AsyncLogger[DefaultAsyncContext@main]-1" Id=29 TIMED_WAITING on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@27263978
+	at sun.misc.Unsafe.park(Native Method)
+	-  waiting on java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@27263978
+	at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2078)
+	at com.lmax.disruptor.TimeoutBlockingWaitStrategy.waitFor(TimeoutBlockingWaitStrategy.java:38)
+	at com.lmax.disruptor.ProcessingSequenceBarrier.waitFor(ProcessingSequenceBarrier.java:56)
+	at com.lmax.disruptor.BatchEventProcessor.processEvents(BatchEventProcessor.java:159)
+	at com.lmax.disruptor.BatchEventProcessor.run(BatchEventProcessor.java:125)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+"JDWP Command Reader" Id=7 RUNNABLE (in native)
+
+
+"JDWP Event Helper Thread" Id=6 RUNNABLE
+
+
+"JDWP Transport Listener: dt_socket" Id=5 RUNNABLE
+
+
+"Signal Dispatcher" Id=4 RUNNABLE
+
+
+"Finalizer" Id=3 WAITING on java.lang.ref.ReferenceQueue$Lock@781aab86
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.ReferenceQueue$Lock@781aab86
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:144)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:165)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:216)
+
+
+"Reference Handler" Id=2 WAITING on java.lang.ref.Reference$Lock@70419727
+	at java.lang.Object.wait(Native Method)
+	-  waiting on java.lang.ref.Reference$Lock@70419727
+	at java.lang.Object.wait(Object.java:502)
+	at java.lang.ref.Reference.tryHandlePending(Reference.java:191)
+	at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:153)
+
+
+
+
+-- Performance stats --
+Details:
+	Random tick rate: 3
+	Level stats: ResourceKey[minecraft:dimension / minecraft:overworld]: players: 1, entities: 206 [minecraft:rabbit:50,minecraft:creeper:26,minecraft:item:25,minecraft:skeleton:20,minecraft:cow:20], block_entities: 16 [minecraft:mob_spawner:9,minecraft:chest:6,minecraft:beehive:1], block_ticks: 19, fluid_ticks: 9, chunk_source: ServerChunkCache: 2025,
+ResourceKey[minecraft:dimension / minecraft:the_nether]: players: 0, entities: 0 [], block_entities: 0 [], block_ticks: 0, fluid_ticks: 0, chunk_source: ServerChunkCache: 0,
+ResourceKey[minecraft:dimension / minecraft:the_end]: players: 0, entities: 0 [], block_entities: 0 [], block_ticks: 0, fluid_ticks: 0, chunk_source: ServerChunkCache: 0
+
+-- System Details --
+Details:
+	Minecraft Version: 1.16.5
+	Minecraft Version ID: 1.16.5
+	Operating System: Mac OS X (x86_64) version 10.16
+	Java Version: 1.8.0_281, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 1398333072 bytes (1333 MB) / 1909981184 bytes (1821 MB) up to 3817865216 bytes (3641 MB)
+	CPUs: 6
+	JVM Flags: 0 total; 
+	Plugins: 
+		Minecraft (minecraft) 1.16.5
+		SpongeAPI (spongeapi) 8.0.0-SNAPSHOT
+		Sponge (sponge) 1.16.5-8.0.0-SNAPSHOT
+		SpongeVanilla (spongevanilla) 1.16.5-8.0.0-RC724
+		RealMap (realmap) 2.0
+	Player Count: 1 / 20; [ServerPlayer['LS12324'/216, l='ServerLevel[key=ResourceKey[minecraft:dimension / minecraft:overworld],worldType=minecraft:overworld]', x=-240.84, y=66.00, z=-108.77]]
+	Data Packs: vanilla
+	Is Modded: Definitely; Server brand changed to 'sponge'
+	Type: Dedicated Server (map_server.txt)

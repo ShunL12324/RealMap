@@ -1,13 +1,24 @@
 package com.github.ericliucn.realmap.utils;
 
 import com.github.ericliucn.realmap.Main;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.data.persistence.DataContainer;
+import org.spongepowered.api.data.persistence.DataQuery;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.map.MapCanvas;
+import org.spongepowered.api.map.MapInfo;
 import org.spongepowered.api.map.color.MapColor;
 import org.spongepowered.api.map.color.MapColorType;
 import org.spongepowered.api.map.color.MapColorTypes;
 import org.spongepowered.api.map.color.MapShade;
 import org.spongepowered.api.registry.RegistryTypes;
+import org.spongepowered.api.util.Ticks;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,8 +27,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -78,17 +89,10 @@ public class Utils {
         return outputImage;
     }
 
-    private static BufferedImage getResizedImage(BufferedImage bufferedImage){
-        return getResizedImage(bufferedImage, 128, 128);
-    }
 
     public static MapCanvas getMapCanvas(BufferedImage bufferedImage){
-        return getMapCanvas(bufferedImage, 128, 128);
-    }
-
-    public static MapCanvas getMapCanvas(BufferedImage bufferedImage, int width, int height){
         MapCanvas.Builder canvasBuilder = MapCanvas.builder();
-        BufferedImage image = getResizedImage(bufferedImage, width, height);
+        BufferedImage image = getResizedImage(bufferedImage, 128, 128);
         for (int i = 0; i < 128; i++) {
             for (int j = 0; j < 128; j++) {
                 Color color = new Color(image.getRGB(i, j));
@@ -119,6 +123,50 @@ public class Utils {
             }
         }
         return bufferedImage;
+    }
+
+    public static Component toComponent(String s){
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(s);
+    }
+
+    public static String toString(Component component){
+        return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+    }
+
+
+    public static MapInfo createNewMap(BufferedImage bufferedImage){
+        Optional<MapInfo> optionalMapInfo = Sponge.server().mapStorage().createNewMapInfo();
+        if (!optionalMapInfo.isPresent()) return null;
+        MapInfo mapInfo = optionalMapInfo.get();
+        MapCanvas mapCanvas = getMapCanvas(bufferedImage);
+        mapInfo.offer(Keys.MAP_CANVAS, mapCanvas);
+        mapInfo.offer(Keys.MAP_LOCKED, true);
+        return mapInfo;
+    }
+
+    public static void giveItem(ItemStack itemStack, ServerPlayer serverPlayer){
+        Entity entity = serverPlayer.world().createEntity(EntityTypes.ITEM, serverPlayer.position());
+        entity.offer(Keys.ITEM_STACK_SNAPSHOT, itemStack.createSnapshot());
+        entity.offer(Keys.PICKUP_DELAY, Ticks.of(1));
+        serverPlayer.world().spawnEntity(entity);
+    }
+
+    public static List<Byte> getMapCanvasBytes(MapCanvas canvas){
+        Optional<List<Byte>> optionalBytes = canvas.toContainer().getByteList(DataQuery.of("MapCanvas"));
+        if (optionalBytes.isPresent() && optionalBytes.get().size() == 16384){
+            return optionalBytes.get();
+        }else {
+            List<Byte> byteList = new ArrayList<>();
+            for (int i = 0; i < 16384; i++) {
+                byteList.add((byte) 0);
+            }
+            return byteList;
+        }
+    }
+
+    public static MapCanvas fillMapCanvasWithBytes(MapCanvas canvas, List<Byte> byteList){
+        DataContainer container = canvas.toContainer().set(DataQuery.of("MapCanvas"), byteList);
+        return MapCanvas.builder().fromContainer(container).build();
     }
 
 

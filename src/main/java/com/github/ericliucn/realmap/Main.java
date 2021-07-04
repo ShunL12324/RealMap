@@ -1,25 +1,22 @@
 package com.github.ericliucn.realmap;
 
+import com.github.ericliucn.realmap.command.Commands;
 import com.github.ericliucn.realmap.utils.Utils;
 import com.google.inject.Inject;
-import net.kyori.adventure.text.Component;
+import io.leangen.geantyref.TypeToken;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.SystemSubject;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.parameter.CommonParameters;
-import org.spongepowered.api.command.parameter.Parameter;
-import org.spongepowered.api.command.registrar.CommandRegistrar;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.data.DataProvider;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.data.Key;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.persistence.DataQuery;
-import org.spongepowered.api.data.persistence.DataStore;
+import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.data.value.MapValue;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
@@ -30,14 +27,16 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.map.MapCanvas;
 import org.spongepowered.api.map.MapInfo;
-import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.scheduler.TaskExecutorService;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.jvm.Plugin;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Plugin("realmap")
 public class Main {
@@ -50,8 +49,12 @@ public class Main {
     @ConfigDir(sharedRoot = false)
     private Path path;
 
-    public Key<Value<String>> MAP_CREATOR;
-    public Key<Value<String>> MAP_NAME;
+    private TaskExecutorService taskExecutorService;
+
+    public static Key<Value<String>> MAP_CREATOR;
+    public static Key<Value<String>> MAP_NAME;
+    public static Key<MapValue<String, List<Byte>>> MAP_FRAMES;
+    public static Key<Value<Integer>> MAP_CURRENT_FRAME;
 
     @Inject
     public Main(final PluginContainer container, final Logger logger){
@@ -63,44 +66,50 @@ public class Main {
     @Listener
     public void onServerStarting(final StartingEngineEvent<Server> event) throws IOException {
         if (!Files.exists(path)) Files.createDirectory(path);
+        if (!Files.exists(path.resolve("Images"))) Files.createDirectory(path.resolve("Images"));
+        Sponge.assetManager().asset("spongie.png").ifPresent(asset -> {
+            try {
+                asset.copyToDirectory(path.resolve("Images"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        runMapTask();
+    }
+
+    private void runMapTask(){
+        if (taskExecutorService == null) taskExecutorService = Sponge.server().scheduler().createExecutor(this.container);
+        taskExecutorService.scheduleAtFixedRate(()->{
+            for (ServerPlayer player : Sponge.server().onlinePlayers()) {
+                final ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
+                if (itemStack.type().equals(ItemTypes.FILLED_MAP.get()) && itemStack.get(Keys.MAP_INFO).get().supports(MAP_CURRENT_FRAME)){
+                    MapInfo mapInfo = itemStack.get(Keys.MAP_INFO).get();
+                    int currentFrame = mapInfo.get(MAP_CURRENT_FRAME).get();
+                    Map<String, List<Byte>> listMap = mapInfo.get(MAP_FRAMES).get();
+                    List<Byte> newFrame = listMap.get(String.valueOf(currentFrame + 1));
+                    if (newFrame == null){
+                        newFrame = listMap.get("0");
+                        currentFrame = 0;
+                        return;
+                    }
+                    MapCanvas canvas = MapCanvas.builder().fromContainer(mapInfo.toContainer().set(DataQuery.of("MapCanvas"), listMap)).build();
+                    mapInfo.offer(Keys.MAP_CANVAS, canvas);
+                    currentFrame += 1;
+                    mapInfo.offer(MAP_CURRENT_FRAME, currentFrame);
+                    itemStack.offer(Keys.MAP_INFO, mapInfo);
+                }
+            }
+        }, 1000, 200, TimeUnit.MILLISECONDS);
+
     }
 
     @Listener
     public void onRegisterCommand(final RegisterCommandEvent<Command.Parameterized> event){
-        final Parameter.Value<String> mapNamePara = Parameter.string().key("mapName").build();
-        final Parameter.Value<String> imageNamePara = Parameter.string().key("image").build();
+
         final Command.Parameterized command = Command.builder()
-                .addChild(
-                        Command.builder()
-                                .addParameter(mapNamePara)
-                                .addParameter(imageNamePara)
-                                .executor(context -> {
-                                    Object root = context.cause().root();
-                                    String creatorName = "UNKNOWN";
-                                    if (root instanceof SystemSubject){
-                                        creatorName = "terminal";
-                                    }else if (root instanceof ServerPlayer){
-                                        creatorName = ((ServerPlayer) root).name();
-                                    }
-
-                                    String mapName = context.one(mapNamePara).get();
-                                    String imageName = context.one(imageNamePara).get();
-
-                                    BufferedImage bufferedImage = Utils.getBufferedImage(imageName);
-                                    if (bufferedImage == null) return CommandResult.error(Component.text("invalid image address"));
-                                    MapCanvas canvas = Utils.getMapCanvas(bufferedImage);
-                                    MapInfo mapInfo = Sponge.server().mapStorage().createNewMapInfo().get();
-                                    mapInfo.offer(this.MAP_NAME, mapName);
-                                    mapInfo.offer(this.MAP_CREATOR, creatorName);
-                                    mapInfo.offer(Keys.MAP_CANVAS, canvas);
-                                    ItemStack map = ItemStack.of(ItemTypes.FILLED_MAP);
-                                    map.offer(Keys.MAP_INFO, mapInfo);
-                                    if (root instanceof ServerPlayer){
-                                        ((ServerPlayer) root).inventory().offer(map);
-                                    }
-                                    return CommandResult.success();
-                                })
-                                .build(), "create")
+                .addChild(Commands.create, "create")
+                .addChild(Commands.test, "test")
                 .executor(context -> CommandResult.success())
                 .build();
         event.register(container, command, "realmap");
@@ -108,48 +117,23 @@ public class Main {
 
     @Listener
     public void onRegisterData(final RegisterDataEvent event){
-        final ResourceKey creatorKey = ResourceKey.of(this.container, "map_creator");
-        final ResourceKey nameKey = ResourceKey.of(this.container, "map_name");
-
-        this.MAP_CREATOR = Key.builder().key(creatorKey).elementType(String.class).build();
-        this.MAP_NAME = Key.builder().key(nameKey).elementType(String.class).build();
-
-        final DataProvider<Value<String>, String> creatorDataProvider = DataProvider.mutableBuilder()
-                .key(MAP_CREATOR)
-                .dataHolder(MapInfo.class)
-                .set(((mapInfo, s) -> mapInfo.offer(this.MAP_CREATOR, s)))
-                .get(mapInfo -> mapInfo.get(this.MAP_CREATOR).orElse("UNKNOWN"))
-                .delete(mapInfo -> mapInfo.remove(this.MAP_CREATOR))
+        MAP_NAME = Key.from(this.container, "map_name", String.class);
+        event.register(DataRegistration.of(MAP_NAME, MapInfo.class));
+        MAP_CREATOR = Key.from(this.container, "map_creator", String.class);
+        event.register(DataRegistration.of(MAP_CREATOR, MapInfo.class));
+        MAP_FRAMES = Key.builder()
+                .key(ResourceKey.of("realmap", "map_frames"))
+                .mapElementType(TypeToken.get(String.class), new TypeToken<List<Byte>>(){})
                 .build();
-
-        final DataProvider<Value<String>, String> nameDataProvider = DataProvider.mutableBuilder()
-                .key(MAP_NAME)
-                .dataHolder(MapInfo.class)
-                .set(((mapInfo, s) -> mapInfo.offer(MAP_NAME, s)))
-                .get(mapInfo -> mapInfo.get(this.MAP_NAME).orElse("UNKNOWN"))
-                .delete(mapInfo -> mapInfo.remove(this.MAP_NAME))
-                .build();
-
-        final DataStore creatorDataStore = DataStore.of(this.MAP_CREATOR, DataQuery.of("map_creator"), MapInfo.class);
-        final DataStore nameDataStore = DataStore.of(this.MAP_NAME, DataQuery.of("map_name"), MapInfo.class);
-
-        final DataRegistration creatorDataRegistry = DataRegistration.builder()
-                .dataKey(this.MAP_CREATOR)
-                .store(creatorDataStore)
-                .provider(creatorDataProvider)
-                .build();
-
-        final DataRegistration nameDataRegistry = DataRegistration.builder()
-                .dataKey(this.MAP_NAME)
-                .store(nameDataStore)
-                .provider(nameDataProvider)
-                .build();
-
-        event.register(creatorDataRegistry);
-        event.register(nameDataRegistry);
+        event.register(DataRegistration.of(MAP_FRAMES, MapInfo.class));
+        MAP_CURRENT_FRAME = Key.from(this.container, "map_current_frame", Integer.class);
+        event.register(DataRegistration.of(MAP_CURRENT_FRAME, MapInfo.class));
     }
+
+
 
     public Path getPath() {
         return path;
     }
+
 }

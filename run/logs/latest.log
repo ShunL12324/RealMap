@@ -1,48 +1,55 @@
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Transitioning to ModLauncher, please wait...
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: ModLauncher running: args [--nogui, --launchTarget, sponge_server_prod]
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 1.8.0_292 by AdoptOpenJDK
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: SpongePowered PLUGIN Subsystem Version=0.2.1-SNAPSHOT Source=file:/C:/Users/93206/.gradle/caches/modules-2/files-2.1/org.spongepowered/spongevanilla/1.16.5-8.0.0-RC709/e2f83ee42282124b3d4af8b40ed2637d67e7507/spongevanilla-1.16.5-8.0.0-RC709-universal.jar
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Plugin resource locator 'java_directory' found.
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Plugin resource locator 'java_classpath' found.
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Plugin language loader 'java_plain' found.
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.3 Source=file:/C:/Users/93206/IdeaProjects/RealMap/run/libraries/org/spongepowered/mixin/0.8.3/mixin-0.8.3.jar Service=ModLauncher Env=SERVER
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Locating 'java_directory' resources...
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Located [0] resource(s) for 'java_directory'...
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Locating 'java_classpath' resources...
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Located [2] resource(s) for 'java_classpath'...
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Launching target 'sponge_server_prod' with arguments [--nogui]
-[03ÆßÔÂ2021 22:31:20] [main/INFO]: Transitioning to Sponge launch, please wait...
-[03ÆßÔÂ2021 22:31:21] [main/INFO]: Loading Sponge, please wait...
-[03ÆßÔÂ2021 22:31:33] [main/INFO]: Loaded plugin(s): [minecraft, spongeapi, sponge, spongevanilla, realmap]
-[03ÆßÔÂ2021 22:31:33] [main/INFO]: Registered service [PaginationService] to plugin 'sponge'.
-[03ÆßÔÂ2021 22:31:33] [main/INFO]: Loading Minecraft Server, please wait...
-[03ÆßÔÂ2021 22:31:35] [main/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[03ÆßÔÂ2021 22:31:38] [main/INFO]: Reloading ResourceManager: Default
-[03ÆßÔÂ2021 22:31:39] [Worker-Main-10/INFO]: Loaded 859 recipes
-[03ÆßÔÂ2021 22:31:40] [Worker-Main-10/INFO]: Loaded 927 advancements
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Registered service [BanService] to plugin 'sponge'.
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Registered service [ContextService] to plugin 'sponge'.
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Registered service [PermissionService] to plugin 'sponge'.
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Registered service [WhitelistService] to plugin 'sponge'.
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Starting minecraft server version 1.16.5
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Loading properties
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Default game type: SURVIVAL
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Generating keypair
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Starting Minecraft server on *:25565
-[03ÆßÔÂ2021 22:31:41] [Server thread/INFO]: Using default channel type
-[03ÆßÔÂ2021 22:31:43] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[03ÆßÔÂ2021 22:31:43] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
-[03ÆßÔÂ2021 22:31:43] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[03ÆßÔÂ2021 22:31:43] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
-[03ÆßÔÂ2021 22:31:43] [Server thread/INFO]: Preparing level "world"
-[03ÆßÔÂ2021 22:31:43] [Server thread/INFO]: Loading world 'minecraft:overworld' (minecraft:overworld)
-[03ÆßÔÂ2021 22:31:43] [Server thread/INFO]: Loading world 'minecraft:the_nether' (minecraft:the_nether)
-[03ÆßÔÂ2021 22:31:43] [Server thread/INFO]: Loading world 'minecraft:the_end' (minecraft:the_end)
-[03ÆßÔÂ2021 22:31:43] [Server thread/INFO]: Preparing start region for world 'minecraft:overworld' (minecraft:overworld)
-[03ÆßÔÂ2021 22:31:44] [Server thread/INFO]: Preparing spawn area: 0%
-[03ÆßÔÂ2021 22:31:44] [Server thread/INFO]: Preparing spawn area: 0%
-[03ÆßÔÂ2021 22:31:44] [Server thread/INFO]: Preparing spawn area: 0%
-[03ÆßÔÂ2021 22:31:45] [Server thread/INFO]: Preparing spawn area: 83%
-[03ÆßÔÂ2021 22:31:45] [Server thread/INFO]: Preparing spawn area: 84%
-[03ÆßÔÂ2021 22:31:45] [Server thread/INFO]: Time elapsed: 2478 ms
-[03ÆßÔÂ2021 22:31:45] [Server thread/INFO]: Done (2.929s)! For help, type "help"
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Transitioning to ModLauncher, please wait...
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: ModLauncher running: args [--nogui, --launchTarget, sponge_server_prod]
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 1.8.0_281 by Oracle Corporation
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: SpongePowered PLUGIN Subsystem Version=0.2.1-SNAPSHOT Source=file:/Users/shun/.gradle/caches/modules-2/files-2.1/org.spongepowered/spongevanilla/1.16.5-8.0.0-RC724/5d69332546d0408261286c33b0b0d3ab9450c13a/spongevanilla-1.16.5-8.0.0-RC724-universal.jar
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Plugin resource locator 'java_directory' found.
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Plugin resource locator 'java_classpath' found.
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Plugin language loader 'java_plain' found.
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.3 Source=file:/Users/shun/IdeaProjects/RealMap/run/libraries/org/spongepowered/mixin/0.8.3/mixin-0.8.3.jar Service=ModLauncher Env=SERVER
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Locating 'java_directory' resources...
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Located [0] resource(s) for 'java_directory'...
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Locating 'java_classpath' resources...
+[04ä¸ƒæœˆ2021 19:19:48] [main/INFO]: Located [2] resource(s) for 'java_classpath'...
+[04ä¸ƒæœˆ2021 19:19:49] [main/INFO]: Launching target 'sponge_server_prod' with arguments [--nogui]
+[04ä¸ƒæœˆ2021 19:19:49] [main/INFO]: Transitioning to Sponge launch, please wait...
+[04ä¸ƒæœˆ2021 19:19:50] [main/INFO]: Loading Sponge, please wait...
+[04ä¸ƒæœˆ2021 19:20:01] [main/INFO]: Loaded plugin(s): [minecraft, spongeapi, sponge, spongevanilla, realmap]
+[04ä¸ƒæœˆ2021 19:20:01] [main/INFO]: Registered service [PaginationService] to plugin 'sponge'.
+[04ä¸ƒæœˆ2021 19:20:01] [main/INFO]: Loading Minecraft Server, please wait...
+[04ä¸ƒæœˆ2021 19:20:02] [main/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[04ä¸ƒæœˆ2021 19:20:05] [main/INFO]: Reloading ResourceManager: Default
+[04ä¸ƒæœˆ2021 19:20:05] [Worker-Main-6/INFO]: Loaded 859 recipes
+[04ä¸ƒæœˆ2021 19:20:07] [Worker-Main-6/INFO]: Loaded 927 advancements
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Registered service [BanService] to plugin 'sponge'.
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Registered service [ContextService] to plugin 'sponge'.
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Registered service [PermissionService] to plugin 'sponge'.
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Registered service [WhitelistService] to plugin 'sponge'.
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Starting minecraft server version 1.16.5
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Loading properties
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Default game type: SURVIVAL
+[04ä¸ƒæœˆ2021 19:20:08] [Server thread/INFO]: Generating keypair
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Starting Minecraft server on *:25565
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Using default channel type
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Preparing level "world"
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Loading world 'minecraft:overworld' (minecraft:overworld)
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Loading world 'minecraft:the_nether' (minecraft:the_nether)
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Loading world 'minecraft:the_end' (minecraft:the_end)
+[04ä¸ƒæœˆ2021 19:20:09] [Server thread/INFO]: Preparing start region for world 'minecraft:overworld' (minecraft:overworld)
+[04ä¸ƒæœˆ2021 19:20:10] [Server thread/INFO]: Preparing spawn area: 0%
+[04ä¸ƒæœˆ2021 19:20:10] [Server thread/INFO]: Preparing spawn area: 0%
+[04ä¸ƒæœˆ2021 19:20:10] [Worker-Main-10/INFO]: Preparing spawn area: 0%
+[04ä¸ƒæœˆ2021 19:20:11] [Server thread/INFO]: Preparing spawn area: 19%
+[04ä¸ƒæœˆ2021 19:20:12] [Server thread/INFO]: Preparing spawn area: 62%
+[04ä¸ƒæœˆ2021 19:20:12] [Server thread/INFO]: Time elapsed: 2390 ms
+[04ä¸ƒæœˆ2021 19:20:12] [Server thread/INFO]: Done (2.924s)! For help, type "help"
+[04ä¸ƒæœˆ2021 19:20:58] [Server thread/INFO]: LS12324[/127.0.0.1:54042] logged in to world 'minecraft:overworld' with entity id 221 at (-236.08320818155894, 64.0, -104.4723159838401)
+[04ä¸ƒæœˆ2021 19:21:01] [Server thread/WARN]: Can't keep up! Is the server overloaded? Running 2525ms or 50 ticks behind
+[04ä¸ƒæœˆ2021 19:22:00] [Server thread/INFO]: LS12324 lost connection: Disconnected
+[04ä¸ƒæœˆ2021 19:22:00] [Server thread/INFO]: LS12324 left the game
+[04ä¸ƒæœˆ2021 19:22:03] [Server thread/INFO]: LS12324[/127.0.0.1:54047] logged in to world 'minecraft:overworld' with entity id 502 at (-279.19911384373853, 68.0, -146.9138773974025)
+[04ä¸ƒæœˆ2021 19:22:05] [Server thread/INFO]: LS12324 lost connection: Disconnected
+[04ä¸ƒæœˆ2021 19:22:05] [Server thread/INFO]: LS12324 left the game
