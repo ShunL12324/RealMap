@@ -2,11 +2,8 @@ package com.github.ericliucn.realmap;
 
 import com.github.ericliucn.realmap.command.Commands;
 import com.github.ericliucn.realmap.handler.MapInfoHandler;
-import com.github.ericliucn.realmap.utils.Utils;
 import com.google.inject.Inject;
-import io.leangen.geantyref.TypeToken;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.Command;
@@ -15,29 +12,28 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.data.Key;
 import org.spongepowered.api.data.Keys;
-import org.spongepowered.api.data.persistence.DataQuery;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.data.value.ListValue;
-import org.spongepowered.api.data.value.MapValue;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.RegisterDataEvent;
+import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.map.MapCanvas;
 import org.spongepowered.api.map.MapInfo;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.scheduler.TaskExecutorService;
+import org.spongepowered.api.util.Ticks;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.jvm.Plugin;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -77,28 +73,37 @@ public class Main {
                 e.printStackTrace();
             }
         });
-
-        runMapTask();
     }
 
     private void runMapTask(){
-        if (taskExecutorService == null) taskExecutorService = Sponge.server().game().asyncScheduler().createExecutor(this.container);
-        taskExecutorService.scheduleAtFixedRate(()->{
-            for (ServerPlayer player : Sponge.server().onlinePlayers()) {
-                ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
-                if (itemStack.type().equals(ItemTypes.FILLED_MAP.get())){
-                    Optional<MapInfo> optionalMapInfo = itemStack.get(Keys.MAP_INFO);
-                    if (optionalMapInfo.isPresent()){
-                        MapInfo origin = optionalMapInfo.get();
-                        MapInfo result = MapInfoHandler.instance.getNewFrameMapInfo(origin.uniqueId());
-                        if (result != null){
-                            itemStack.offer(Keys.MAP_INFO, result);
+        if (taskExecutorService == null) taskExecutorService = Sponge.server().scheduler().createExecutor(this.container);
+        Task task = Task.builder()
+                .execute(()->{
+                    for (ServerPlayer player : Sponge.server().onlinePlayers()) {
+                        ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
+                        if (itemStack.type().equals(ItemTypes.FILLED_MAP.get())){
+                            itemStack.get(Keys.MAP_INFO).ifPresent(mapInfo -> {
+                                MapInfo result = MapInfoHandler.instance.getNewFrameMapInfo(mapInfo.uniqueId());
+                                if (result != null){
+                                    itemStack.offer(Keys.MAP_INFO, result);
+                                }
+                            });
                         }
                     }
-                }
-            }
-        }, 1000, 200, TimeUnit.MILLISECONDS);
+                })
+                .interval(Ticks.of(1))
+                .plugin(this.container)
+                .name("map_task")
+                .build();
 
+        Sponge.server().game().asyncScheduler().submit(task);
+
+    }
+
+    @Listener
+    public void onLoaded(final StartedEngineEvent<Server> event){
+        new MapInfoHandler();
+        runMapTask();
     }
 
     @Listener

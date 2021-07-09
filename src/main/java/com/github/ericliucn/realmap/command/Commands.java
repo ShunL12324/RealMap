@@ -2,6 +2,7 @@ package com.github.ericliucn.realmap.command;
 
 import com.github.ericliucn.realmap.Main;
 import com.github.ericliucn.realmap.command.completer.FileNameCompleter;
+import com.github.ericliucn.realmap.handler.MapInfoHandler;
 import com.github.ericliucn.realmap.utils.ImageUtils;
 import com.github.ericliucn.realmap.utils.Utils;
 import net.kyori.adventure.text.Component;
@@ -71,7 +72,7 @@ public class Commands {
                         itemStack.offer(Keys.MAP_INFO, mapInfo);
                         Utils.giveItem(itemStack, player);
                     }
-
+                    MapInfoHandler.instance.reload();
                     return CommandResult.success();
                 }catch (Exception e){
                     return CommandResult.error(Component.text("error"));
