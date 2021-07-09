@@ -1,6 +1,7 @@
 package com.github.ericliucn.realmap;
 
 import com.github.ericliucn.realmap.command.Commands;
+import com.github.ericliucn.realmap.handler.MapInfoHandler;
 import com.github.ericliucn.realmap.utils.Utils;
 import com.google.inject.Inject;
 import io.leangen.geantyref.TypeToken;
@@ -16,6 +17,7 @@ import org.spongepowered.api.data.Key;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.persistence.DataQuery;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.data.value.ListValue;
 import org.spongepowered.api.data.value.MapValue;
 import org.spongepowered.api.data.value.Value;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
@@ -36,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Plugin("realmap")
@@ -53,7 +56,7 @@ public class Main {
 
     public static Key<Value<String>> MAP_CREATOR;
     public static Key<Value<String>> MAP_NAME;
-    public static Key<MapValue<String, List<Byte>>> MAP_FRAMES;
+    public static Key<ListValue<MapCanvas>> MAP_FRAMES;
     public static Key<Value<Integer>> MAP_CURRENT_FRAME;
 
     @Inject
@@ -79,25 +82,19 @@ public class Main {
     }
 
     private void runMapTask(){
-        if (taskExecutorService == null) taskExecutorService = Sponge.server().scheduler().createExecutor(this.container);
+        if (taskExecutorService == null) taskExecutorService = Sponge.server().game().asyncScheduler().createExecutor(this.container);
         taskExecutorService.scheduleAtFixedRate(()->{
             for (ServerPlayer player : Sponge.server().onlinePlayers()) {
-                final ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
-                if (itemStack.type().equals(ItemTypes.FILLED_MAP.get()) && itemStack.get(Keys.MAP_INFO).get().supports(MAP_CURRENT_FRAME)){
-                    MapInfo mapInfo = itemStack.get(Keys.MAP_INFO).get();
-                    int currentFrame = mapInfo.get(MAP_CURRENT_FRAME).get();
-                    Map<String, List<Byte>> listMap = mapInfo.get(MAP_FRAMES).get();
-                    List<Byte> newFrame = listMap.get(String.valueOf(currentFrame + 1));
-                    if (newFrame == null){
-                        newFrame = listMap.get("0");
-                        currentFrame = 0;
-                        return;
+                ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
+                if (itemStack.type().equals(ItemTypes.FILLED_MAP.get())){
+                    Optional<MapInfo> optionalMapInfo = itemStack.get(Keys.MAP_INFO);
+                    if (optionalMapInfo.isPresent()){
+                        MapInfo origin = optionalMapInfo.get();
+                        MapInfo result = MapInfoHandler.instance.getNewFrameMapInfo(origin.uniqueId());
+                        if (result != null){
+                            itemStack.offer(Keys.MAP_INFO, result);
+                        }
                     }
-                    MapCanvas canvas = MapCanvas.builder().fromContainer(mapInfo.toContainer().set(DataQuery.of("MapCanvas"), listMap)).build();
-                    mapInfo.offer(Keys.MAP_CANVAS, canvas);
-                    currentFrame += 1;
-                    mapInfo.offer(MAP_CURRENT_FRAME, currentFrame);
-                    itemStack.offer(Keys.MAP_INFO, mapInfo);
                 }
             }
         }, 1000, 200, TimeUnit.MILLISECONDS);
@@ -121,10 +118,7 @@ public class Main {
         event.register(DataRegistration.of(MAP_NAME, MapInfo.class));
         MAP_CREATOR = Key.from(this.container, "map_creator", String.class);
         event.register(DataRegistration.of(MAP_CREATOR, MapInfo.class));
-        MAP_FRAMES = Key.builder()
-                .key(ResourceKey.of("realmap", "map_frames"))
-                .mapElementType(TypeToken.get(String.class), new TypeToken<List<Byte>>(){})
-                .build();
+        MAP_FRAMES = Key.fromList(this.container, "map_frames", MapCanvas.class);
         event.register(DataRegistration.of(MAP_FRAMES, MapInfo.class));
         MAP_CURRENT_FRAME = Key.from(this.container, "map_current_frame", Integer.class);
         event.register(DataRegistration.of(MAP_CURRENT_FRAME, MapInfo.class));

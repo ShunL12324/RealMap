@@ -40,7 +40,7 @@ public class Commands {
             .executor(context -> {
                 try {
                     String mapName = context.requireOne(mapNamePara);
-                    String image = context.requireOne(imagePara);
+                    String imageName = context.requireOne(imagePara);
 
                     String creatorName = "UNKNOWN";
                     Object root = context.cause().root();
@@ -50,18 +50,18 @@ public class Commands {
                         creatorName = "terminal";
                     }
 
-                    Map<String, List<Byte>> listMap = ImageUtils.getFrames(image);
-                    if (listMap.size() == 0) return CommandResult.error(Utils.toComponent("&4Unable to get image file"));
+                    List<MapCanvas> mapCanvasList = ImageUtils.getFrames(imageName);
+                    if (mapCanvasList.size() == 0) return CommandResult.error(Utils.toComponent("&4Unable to get image file"));
                     Optional<MapInfo> optionalMapInfo = Sponge.server().mapStorage().createNewMapInfo();
                     if (!optionalMapInfo.isPresent()) return CommandResult.error(Utils.toComponent("&4Unable to create new map"));
                     MapInfo mapInfo = optionalMapInfo.get();
 
 
                     mapInfo.offer(Main.MAP_CURRENT_FRAME,0);
-                    mapInfo.offer(Main.MAP_FRAMES, listMap);
+                    mapInfo.offer(Main.MAP_FRAMES, mapCanvasList);
                     mapInfo.offer(Main.MAP_CREATOR, creatorName);
                     mapInfo.offer(Main.MAP_NAME, mapName);
-                    mapInfo.offer(Keys.MAP_CANVAS, Utils.fillMapCanvasWithBytes(MapCanvas.blank(), listMap.get("0")));
+                    mapInfo.offer(Keys.MAP_CANVAS, mapCanvasList.get(0));
                     mapInfo.offer(Keys.MAP_LOCKED, true);
 
 
