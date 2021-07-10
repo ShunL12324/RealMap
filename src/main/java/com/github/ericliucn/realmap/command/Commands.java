@@ -2,7 +2,7 @@ package com.github.ericliucn.realmap.command;
 
 import com.github.ericliucn.realmap.Main;
 import com.github.ericliucn.realmap.command.completer.FileNameCompleter;
-import com.github.ericliucn.realmap.handler.MapInfoHandler;
+import com.github.ericliucn.realmap.handler.MapUpdateTaskHandler;
 import com.github.ericliucn.realmap.utils.ImageUtils;
 import com.github.ericliucn.realmap.utils.Utils;
 import net.kyori.adventure.text.Component;
@@ -11,10 +11,11 @@ import org.spongepowered.api.SystemSubject;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.parameter.Parameter;
-import org.spongepowered.api.data.DataTransactionResult;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.persistence.DataContainer;
 import org.spongepowered.api.data.persistence.DataQuery;
+import org.spongepowered.api.data.type.HandType;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -22,11 +23,8 @@ import org.spongepowered.api.map.MapCanvas;
 import org.spongepowered.api.map.MapInfo;
 import org.spongepowered.api.service.permission.Subject;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class Commands {
@@ -72,7 +70,7 @@ public class Commands {
                         itemStack.offer(Keys.MAP_INFO, mapInfo);
                         Utils.giveItem(itemStack, player);
                     }
-                    MapInfoHandler.instance.reload();
+                    MapUpdateTaskHandler.instance.addMapInfo(mapInfo);
                     return CommandResult.success();
                 }catch (Exception e){
                     return CommandResult.error(Component.text("error"));
@@ -85,21 +83,9 @@ public class Commands {
                 Subject subject = context.subject();
                 if (subject instanceof ServerPlayer){
                     ServerPlayer player = ((ServerPlayer) subject);
-                    ItemStack itemStack = player.inventory().hotbar().slot(player.inventory().hotbar().selectedSlotIndex()).get().peek();
-                    if (itemStack.type().equals(ItemTypes.FILLED_MAP.get())){
-                        MapInfo mapInfo = itemStack.get(Keys.MAP_INFO).get();
-                        MapCanvas mapCanvas = mapInfo.get(Keys.MAP_CANVAS).get();
+                    ItemStack itemStack = player.itemInHand(HandTypes.MAIN_HAND);
+                    MapUpdateTaskHandler.instance.setStatus(!MapUpdateTaskHandler.instance.getStatus());
 
-                        List<Byte> byteList = new ArrayList<>();
-                        for (int i = 0; i < 16384; i++) {
-                            byteList.add((byte) 0x30);
-                        }
-                        DataContainer newContainer = mapCanvas.toContainer().set(DataQuery.of("MapCanvas"), byteList);
-
-
-                        mapInfo.offer(Keys.MAP_CANVAS, MapCanvas.builder().fromContainer(newContainer).build());
-                        itemStack.offer(Keys.MAP_INFO, mapInfo);
-                    }
 
                 }
                 return CommandResult.success();

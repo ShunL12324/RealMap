@@ -1,50 +1,49 @@
-[10七月2021 02:44:04] [main/INFO]: Transitioning to ModLauncher, please wait...
-[10七月2021 02:44:04] [main/INFO]: ModLauncher running: args [--nogui, --launchTarget, sponge_server_prod]
-[10七月2021 02:44:04] [main/INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 1.8.0_292 by AdoptOpenJDK
-[10七月2021 02:44:04] [main/INFO]: SpongePowered PLUGIN Subsystem Version=0.2.1-SNAPSHOT Source=file:/C:/Users/93206/.gradle/caches/modules-2/files-2.1/org.spongepowered/spongevanilla/1.16.5-8.0.0-RC740/b9d9c6f1b23ef33a0331850c32bb71d070b8351e/spongevanilla-1.16.5-8.0.0-RC740-universal.jar
-[10七月2021 02:44:04] [main/INFO]: Plugin resource locator 'java_directory' found.
-[10七月2021 02:44:04] [main/INFO]: Plugin resource locator 'java_classpath' found.
-[10七月2021 02:44:04] [main/INFO]: Plugin language loader 'java_plain' found.
-[10七月2021 02:44:04] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.3 Source=file:/C:/Users/93206/IdeaProjects/RealMap/run/libraries/org/spongepowered/mixin/0.8.3/mixin-0.8.3.jar Service=ModLauncher Env=SERVER
-[10七月2021 02:44:04] [main/INFO]: Locating 'java_directory' resources...
-[10七月2021 02:44:04] [main/INFO]: Located [0] resource(s) for 'java_directory'...
-[10七月2021 02:44:04] [main/INFO]: Locating 'java_classpath' resources...
-[10七月2021 02:44:04] [main/INFO]: Located [2] resource(s) for 'java_classpath'...
-[10七月2021 02:44:04] [main/INFO]: Launching target 'sponge_server_prod' with arguments [--nogui]
-[10七月2021 02:44:04] [main/INFO]: Transitioning to Sponge launch, please wait...
-[10七月2021 02:44:05] [main/INFO]: Loading Sponge, please wait...
-[10七月2021 02:44:18] [main/INFO]: Loaded plugin(s): [minecraft, spongeapi, sponge, spongevanilla, realmap]
-[10七月2021 02:44:18] [main/INFO]: Registered service [PaginationService] to plugin 'sponge'.
-[10七月2021 02:44:18] [main/INFO]: Loading Minecraft Server, please wait...
-[10七月2021 02:44:19] [main/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[10七月2021 02:44:22] [main/INFO]: Reloading ResourceManager: Default
-[10七月2021 02:44:23] [Worker-Main-8/INFO]: Loaded 859 recipes
-[10七月2021 02:44:24] [Worker-Main-8/INFO]: Loaded 927 advancements
-[10七月2021 02:44:25] [Server thread/INFO]: Registered service [BanService] to plugin 'sponge'.
-[10七月2021 02:44:25] [Server thread/INFO]: Registered service [ContextService] to plugin 'sponge'.
-[10七月2021 02:44:25] [Server thread/INFO]: Registered service [PermissionService] to plugin 'sponge'.
-[10七月2021 02:44:25] [Server thread/INFO]: Registered service [WhitelistService] to plugin 'sponge'.
-[10七月2021 02:44:26] [Server thread/INFO]: Starting minecraft server version 1.16.5
-[10七月2021 02:44:26] [Server thread/INFO]: Loading properties
-[10七月2021 02:44:26] [Server thread/INFO]: Default game type: SURVIVAL
-[10七月2021 02:44:26] [Server thread/INFO]: Generating keypair
-[10七月2021 02:44:26] [Server thread/INFO]: Starting Minecraft server on *:25565
-[10七月2021 02:44:26] [Server thread/INFO]: Using default channel type
-[10七月2021 02:44:28] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[10七月2021 02:44:28] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
-[10七月2021 02:44:28] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[10七月2021 02:44:28] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
-[10七月2021 02:44:28] [Server thread/INFO]: Preparing level "world"
-[10七月2021 02:44:28] [Server thread/INFO]: Loading world 'minecraft:overworld' (minecraft:overworld)
-[10七月2021 02:44:28] [Server thread/INFO]: Loading world 'minecraft:the_nether' (minecraft:the_nether)
-[10七月2021 02:44:28] [Server thread/INFO]: Loading world 'minecraft:the_end' (minecraft:the_end)
-[10七月2021 02:44:28] [Server thread/INFO]: Preparing start region for world 'minecraft:overworld' (minecraft:overworld)
-[10七月2021 02:44:29] [Server thread/INFO]: Preparing spawn area: 0%
-[10七月2021 02:44:29] [Server thread/INFO]: Preparing spawn area: 0%
-[10七月2021 02:44:30] [Server thread/INFO]: Preparing spawn area: 0%
-[10七月2021 02:44:30] [Server thread/INFO]: Preparing spawn area: 0%
-[10七月2021 02:44:31] [Server thread/INFO]: Preparing spawn area: 60%
-[10七月2021 02:44:31] [Server thread/INFO]: Preparing spawn area: 81%
-[10七月2021 02:44:31] [Server thread/INFO]: Time elapsed: 2678 ms
-[10七月2021 02:44:31] [Server thread/INFO]: Done (3.161s)! For help, type "help"
-[10七月2021 02:44:35] [Server thread/INFO]: Eric12324[/127.0.0.1:49942] logged in to world 'minecraft:overworld' with entity id 217 at (-142.80819991194502, 70.0, -86.27098683058148)
+[10七月2021 12:53:14] [main/INFO]: Transitioning to ModLauncher, please wait...
+[10七月2021 12:53:14] [main/INFO]: ModLauncher running: args [--nogui, --launchTarget, sponge_server_prod]
+[10七月2021 12:53:14] [main/INFO]: ModLauncher 8.0.9+86+master.3cf110c starting: java version 1.8.0_291 by Oracle Corporation
+[10七月2021 12:53:14] [main/INFO]: SpongePowered PLUGIN Subsystem Version=0.2.1-SNAPSHOT Source=file:/C:/Users/shun/.gradle/caches/modules-2/files-2.1/org.spongepowered/spongevanilla/1.16.5-8.0.0-RC741/11f95de343c2b6bdb9b37e3a2d34fd84177f7a10/spongevanilla-1.16.5-8.0.0-RC741-universal.jar
+[10七月2021 12:53:14] [main/INFO]: Plugin resource locator 'java_directory' found.
+[10七月2021 12:53:14] [main/INFO]: Plugin resource locator 'java_classpath' found.
+[10七月2021 12:53:14] [main/INFO]: Plugin language loader 'java_plain' found.
+[10七月2021 12:53:14] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.3 Source=file:/C:/Users/shun/IdeaProjects/RealMap/run/libraries/org/spongepowered/mixin/0.8.3/mixin-0.8.3.jar Service=ModLauncher Env=SERVER
+[10七月2021 12:53:14] [main/INFO]: Locating 'java_directory' resources...
+[10七月2021 12:53:14] [main/INFO]: Located [0] resource(s) for 'java_directory'...
+[10七月2021 12:53:14] [main/INFO]: Locating 'java_classpath' resources...
+[10七月2021 12:53:14] [main/INFO]: Located [2] resource(s) for 'java_classpath'...
+[10七月2021 12:53:14] [main/INFO]: Transitioning to Sponge launch, please wait...
+[10七月2021 12:53:14] [main/INFO]: Launching target 'sponge_server_prod' with arguments [--nogui]
+[10七月2021 12:53:15] [main/INFO]: Loading Sponge, please wait...
+[10七月2021 12:53:22] [main/INFO]: Loaded plugin(s): [minecraft, spongeapi, sponge, spongevanilla, realmap]
+[10七月2021 12:53:22] [main/INFO]: Registered service [PaginationService] to plugin 'sponge'.
+[10七月2021 12:53:22] [main/INFO]: Loading Minecraft Server, please wait...
+[10七月2021 12:53:22] [main/INFO]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[10七月2021 12:53:23] [main/INFO]: Reloading ResourceManager: Default
+[10七月2021 12:53:24] [Worker-Main-10/INFO]: Loaded 859 recipes
+[10七月2021 12:53:25] [Worker-Main-10/INFO]: Loaded 927 advancements
+[10七月2021 12:53:25] [Server thread/INFO]: Registered service [BanService] to plugin 'sponge'.
+[10七月2021 12:53:25] [Server thread/INFO]: Registered service [ContextService] to plugin 'sponge'.
+[10七月2021 12:53:25] [Server thread/INFO]: Registered service [PermissionService] to plugin 'sponge'.
+[10七月2021 12:53:25] [Server thread/INFO]: Registered service [WhitelistService] to plugin 'sponge'.
+[10七月2021 12:53:25] [Server thread/INFO]: Starting minecraft server version 1.16.5
+[10七月2021 12:53:25] [Server thread/INFO]: Loading properties
+[10七月2021 12:53:25] [Server thread/INFO]: Default game type: SURVIVAL
+[10七月2021 12:53:25] [Server thread/INFO]: Generating keypair
+[10七月2021 12:53:25] [Server thread/INFO]: Starting Minecraft server on 0.0.0.0:25565
+[10七月2021 12:53:25] [Server thread/INFO]: Using default channel type
+[10七月2021 12:53:26] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[10七月2021 12:53:26] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
+[10七月2021 12:53:26] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[10七月2021 12:53:26] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
+[10七月2021 12:53:26] [Server thread/INFO]: Preparing level "world"
+[10七月2021 12:53:26] [Server thread/INFO]: Loading world 'minecraft:overworld' (minecraft:overworld)
+[10七月2021 12:53:26] [Server thread/INFO]: Loading world 'minecraft:the_nether' (minecraft:the_nether)
+[10七月2021 12:53:26] [Server thread/INFO]: Loading world 'minecraft:the_end' (minecraft:the_end)
+[10七月2021 12:53:26] [Server thread/INFO]: Preparing start region for world 'minecraft:overworld' (minecraft:overworld)
+[10七月2021 12:53:26] [Server thread/INFO]: Preparing spawn area: 0%
+[10七月2021 12:53:26] [Server thread/INFO]: Preparing spawn area: 0%
+[10七月2021 12:53:27] [Server thread/INFO]: Preparing spawn area: 21%
+[10七月2021 12:53:28] [Server thread/INFO]: Preparing spawn area: 73%
+[10七月2021 12:53:28] [Server thread/INFO]: Time elapsed: 1704 ms
+[10七月2021 12:53:28] [Server thread/INFO]: Done (1.872s)! For help, type "help"
+[10七月2021 12:54:43] [Server thread/INFO]: Eric12324[/192.168.123.195:57092] logged in to world 'minecraft:overworld' with entity id 237 at (265.803783532481, 65.0, 9.662306955232424)
+[10七月2021 12:56:19] [Server thread/INFO]: [Eric12324: Set own game mode to Creative Mode]
