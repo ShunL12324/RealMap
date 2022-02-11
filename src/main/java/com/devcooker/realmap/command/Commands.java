@@ -1,20 +1,22 @@
-package com.github.ericliucn.realmap.command;
+package com.devcooker.realmap.command;
 
-import com.github.ericliucn.realmap.Main;
-import com.github.ericliucn.realmap.command.completer.FileNameCompleter;
-import com.github.ericliucn.realmap.handler.MapUpdateTaskHandler;
-import com.github.ericliucn.realmap.utils.ImageUtils;
-import com.github.ericliucn.realmap.utils.Utils;
+import com.devcooker.realmap.command.completer.FileNameCompleter;
+import com.devcooker.realmap.handler.MapUpdateTaskHandler;
+import com.devcooker.realmap.Main;
+import com.devcooker.realmap.utils.ImageUtils;
+import com.devcooker.realmap.utils.Utils;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.SystemSubject;
 import org.spongepowered.api.command.Command;
+import org.spongepowered.api.command.CommandCompletion;
 import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.parameter.CommandContext;
 import org.spongepowered.api.command.parameter.Parameter;
+import org.spongepowered.api.command.parameter.managed.ValueCompleter;
 import org.spongepowered.api.data.Keys;
-import org.spongepowered.api.data.persistence.DataContainer;
-import org.spongepowered.api.data.persistence.DataQuery;
-import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.ItemTypes;
@@ -23,9 +25,9 @@ import org.spongepowered.api.map.MapCanvas;
 import org.spongepowered.api.map.MapInfo;
 import org.spongepowered.api.service.permission.Subject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Commands {
 
@@ -33,13 +35,20 @@ public class Commands {
     private static final Parameter.Value<String> imagePara = Parameter.string().completer(new FileNameCompleter()).key("image").build();
 
     public static final Command.Parameterized create = Command.builder()
-            .permission("realmap.command.create")
             .addParameters(mapNamePara)
             .addParameters(imagePara)
             .executor(context -> {
                 try {
                     String mapName = context.requireOne(mapNamePara);
                     String imageName = context.requireOne(imagePara);
+
+                    boolean duplicate = Sponge.server().mapStorage().allMapInfos().stream()
+                            .filter(mapInfo -> mapInfo.get(Main.MAP_NAME).isPresent())
+                            .anyMatch(mapInfo -> mapInfo.get(Main.MAP_NAME).get().equalsIgnoreCase(mapName));
+
+                    if (duplicate){
+                        return CommandResult.error(Utils.toComponent("&4duplicate map name!"));
+                    }
 
                     String creatorName = "UNKNOWN";
                     Object root = context.cause().root();
@@ -76,6 +85,52 @@ public class Commands {
                     return CommandResult.error(Component.text("error"));
                 }
             })
+            .permission("realmap.create")
+            .build();
+
+    public static Command.Parameterized give = Command.builder()
+            .executor(context -> {
+                String name = context.requireOne(Parameter.string().key("map_name").build());
+                ServerPlayer player = context.requireOne(Parameter.player().key("player").build());
+                Sponge.server().mapStorage().allMapInfos().stream()
+                        .filter(mapInfo -> mapInfo.get(Main.MAP_NAME).isPresent() && mapInfo.get(Main.MAP_NAME).get().equalsIgnoreCase(name))
+                        .findFirst()
+                        .ifPresent(mapInfo -> {
+                            ItemStack itemStack = ItemStack.of(ItemTypes.FILLED_MAP);
+                            itemStack.offer(Keys.MAP_INFO, mapInfo);
+                            Utils.giveItem(itemStack, player);
+                        });
+                return CommandResult.success();
+            })
+            .addParameter(Parameter.player().key("player").build())
+            .addParameter(
+                    Parameter.string()
+                            .key("map_name")
+                            .completer((context, currentInput) -> Sponge.server().mapStorage().allMapInfos().stream()
+                                    .filter(mapInfo -> mapInfo.get(Main.MAP_NAME).isPresent())
+                                    .map(mapInfo -> mapInfo.get(Main.MAP_NAME).get())
+                                    .map(CommandCompletion::of)
+                                    .collect(Collectors.toList()))
+                            .build()
+            )
+            .permission("realmap.give")
+            .build();
+
+    public static Command.Parameterized toggle = Command.builder()
+            .executor(context -> {
+                MapUpdateTaskHandler handler = MapUpdateTaskHandler.instance;
+                handler.setStatus(!handler.getStatus());
+                if (context.cause().root() instanceof Audience){
+                    Audience audience = ((Audience) context.cause().root());
+                    if (handler.getStatus()){
+                        audience.sendMessage(Utils.toComponent("&aTurn on map update task"));
+                    }else {
+                        audience.sendMessage(Utils.toComponent("&aTurn off map update task"));
+                    }
+                }
+                return CommandResult.success();
+            })
+            .permission("realmap.toggle")
             .build();
 
     public static Command.Parameterized test = Command.builder()

@@ -1,9 +1,9 @@
-package com.github.ericliucn.realmap.utils;
+package com.devcooker.realmap.utils;
 
-import com.github.ericliucn.realmap.Main;
+import com.devcooker.realmap.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.spongepowered.api.Sponge;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.persistence.DataContainer;
 import org.spongepowered.api.data.persistence.DataQuery;
@@ -12,16 +12,9 @@ import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.map.MapCanvas;
-import org.spongepowered.api.map.MapInfo;
-import org.spongepowered.api.map.color.MapColor;
-import org.spongepowered.api.map.color.MapColorType;
-import org.spongepowered.api.map.color.MapColorTypes;
-import org.spongepowered.api.map.color.MapShade;
-import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.util.Ticks;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -63,6 +55,10 @@ public class Utils {
 
     public static String toString(Component component){
         return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+    }
+
+    public static String toPlain(Component component){
+        return PlainTextComponentSerializer.plainText().serialize(component);
     }
 
 

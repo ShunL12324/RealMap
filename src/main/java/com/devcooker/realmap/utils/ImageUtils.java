@@ -1,6 +1,6 @@
-package com.github.ericliucn.realmap.utils;
+package com.devcooker.realmap.utils;
 
-import com.github.ericliucn.realmap.Main;
+import com.devcooker.realmap.Main;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.map.MapCanvas;
 import org.spongepowered.api.map.color.MapColor;
@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -91,12 +90,10 @@ public class ImageUtils {
 
     private static Collection<MapColor> getAllPossibleColor(){
         Collection<MapColorType> mapColorTypes = Sponge.game()
-                .registries()
                 .registry(RegistryTypes.MAP_COLOR_TYPE)
                 .stream()
                 .collect(Collectors.toList());
         Collection<MapShade> mapShades = Sponge.game()
-                .registries()
                 .registry(RegistryTypes.MAP_SHADE)
                 .stream()
                 .collect(Collectors.toList());

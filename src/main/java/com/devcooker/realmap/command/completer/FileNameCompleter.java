@@ -1,6 +1,6 @@
-package com.github.ericliucn.realmap.command.completer;
+package com.devcooker.realmap.command.completer;
 
-import com.github.ericliucn.realmap.Main;
+import com.devcooker.realmap.Main;
 import org.spongepowered.api.command.CommandCompletion;
 import org.spongepowered.api.command.parameter.CommandContext;
 import org.spongepowered.api.command.registrar.tree.CommandCompletionProvider;

@@ -1,4 +1,4 @@
-package com.github.ericliucn.realmap.utils;
+package com.devcooker.realmap.utils;
 
 import static java.lang.System.arraycopy;
 

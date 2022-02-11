@@ -1,6 +1,6 @@
-package com.github.ericliucn.realmap.handler;
+package com.devcooker.realmap.handler;
 
-import com.github.ericliucn.realmap.Main;
+import com.devcooker.realmap.Main;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.map.MapCanvas;
@@ -27,9 +27,11 @@ public class MapUpdateTaskHandler {
         taskMap = new ConcurrentHashMap<>();
         on = true;
         for (MapInfo info : Sponge.server().mapStorage().allMapInfos()) {
-            if (info.supports(Main.MAP_FRAMES)){
+            if (info.get(Main.MAP_FRAMES).isPresent()){
                 mapInfoMap.put(info.uniqueId(), info);
-                createUpdateTask(info);
+                if (info.get(Main.MAP_FRAMES).get().size() > 1) {
+                    createUpdateTask(info);
+                }
             }
         }
     }
@@ -48,7 +50,6 @@ public class MapUpdateTaskHandler {
                 })
                 .interval(15, TimeUnit.MILLISECONDS)
                 .plugin(Main.instance.container)
-                .name("map.update." + mapInfo.uniqueId().toString())
                 .build();
         taskMap.put(mapInfo.uniqueId(), task);
         Sponge.server().game().asyncScheduler().submit(task);

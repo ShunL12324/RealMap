@@ -1,14 +1,14 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
-import org.spongepowered.plugin.metadata.PluginDependency
+import org.spongepowered.plugin.metadata.model.PluginDependency
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     `java-library`
-    id("org.spongepowered.gradle.plugin") version "1.1.1"
+    id("org.spongepowered.gradle.plugin") version "2.0.1"
     id("com.github.johnrengelman.shadow") version "4.0.4"
 }
 
-group = "com.github.ericliucn"
+group = "com.devcooker"
 version = "2.0"
 
 repositories {
@@ -16,16 +16,19 @@ repositories {
 }
 
 dependencies{
-    implementation( "mysql", "mysql-connector-java", "8.0.25")
 }
 
 sponge {
-    apiVersion("8.0.0")
+    apiVersion("8.1.0-SNAPSHOT")
+    license("All Right Reserved")
+    loader{
+        name(PluginLoaders.JAVA_PLAIN)
+        version("1.0")
+    }
     plugin("realmap") {
-        loader(PluginLoaders.JAVA_PLAIN)
         displayName("RealMap")
-        mainClass("com.github.ericliucn.realmap.Main")
-        description("Just testing things...")
+        entrypoint("com.devcooker.realmap.Main")
+        description("Display images on the map!")
         links {
             homepage("https://spongepowered.org")
             source("https://spongepowered.org/source")
@@ -64,14 +67,12 @@ tasks.withType(AbstractArchiveTask::class).configureEach {
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        relocate("google.protobuf", "myres.google.protobuf")
-        relocate("com.google.protobuf", "myres.com.google.protobuf")
-        relocate("com.mysql", "myres.com.mysql")
+        relocate("google.protobuf", "realmap.google.protobuf")
+        relocate("com.google.protobuf", "realmap.com.google.protobuf")
+        relocate("com.mysql", "realmap.com.mysql")
     }
 }
 
-tasks {
-    build {
-        dependsOn(shadowJar)
-    }
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
